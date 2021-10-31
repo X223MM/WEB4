@@ -1,0 +1,159 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/checkbox.css" rel='stylesheet' type="text/css">
+    <script type="text/javascript" src="js/datajs.js"></script>
+    <title>Редактирование брендов</title>
+    <script>
+        const state = {
+            section: 1
+        };
+        $(document).ready(function() {
+            function output(newDatabrends){
+                if (newDatabrends){
+                    for (index in newDatabrends) {
+                        obj = newDatabrends[index];
+                        $("#listsection").append(getBrends(obj));
+                    }
+                } else {
+                    const startPos = databrends.filter(databrends => databrends.section == '1');
+                    for (index in startPos) {
+                        obj = databrends[index];
+                        $("#listsection").append(getBrends(obj));
+                    }
+                }
+            }
+            $("li").click(function(e){
+                $("#listsection").text('');
+                const currentSection = e.target.id;
+                state.section = currentSection;
+                const newDatabrends = databrends.filter(databrends => databrends.section == currentSection)
+                output(newDatabrends)
+            })
+            $("#addbrends").click(function() {
+                maxIdBrends++;
+                obj = new Section(maxIdBrends,
+                                $("#brendsnewname").val(),
+                                $("#brendsnewsort").val(),
+                                $("#brendssection").val(),
+                                $("#brendstatus").is(":checked"));
+                const newDatabrends = databrends.filter(databrends => databrends.section == state.section)
+                newDatabrends.push(obj);
+                if(state.section == $("#brendssection").val()){
+                    $("#listsection").append(getBrends(obj));
+                }
+            });
+            $("#listsection").click(function(e){
+                if(!$(e.target).hasClass("mydelete")) return true;
+                const newDatabrends = databrends.filter(databrends => databrends.section == state.section)
+                delcontainer = $(e.target).parents("div.container");
+                id = parseInt(delcontainer.attr("data-id"));
+                for (index in newDatabrends){
+                    if (newDatabrends[index].id === id){
+                        delete newDatabrends[index]; 
+                    }
+                }
+                delcontainer.fadeOut("slow", function(){
+                    this.remove()
+                })
+            })
+        output()
+        })
+    </script>
+</head>
+<body>
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li>
+                            <a href="#">Дополнительные справочники</a>
+                        </li>
+                        <li>
+                            <a href="#">Секции категорий</a>
+                        </li>
+                        <li class="active">
+                            <a href="#">Бренды</a>
+                        </li>
+                        <li>
+                            <a href="#">Категории</a>
+                        </li>
+                        <li>
+                            <a href="#">Товары</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="container">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li id="#section1" class="active">
+                    <a id="1" href="#section1" data-toggle="tab">Секция 1</a>
+                </li>
+                <li id="#section2">
+                    <a id="2" href="#section2" data-toggle="tab">Секция 2</a>
+                </li>
+                <li id="#section3">
+                    <a id="3" href="#section3" data-toggle="tab">Секция 3</a>
+                </li>
+                <li id="#section4">
+                    <a id="4" href="#section4" data-toggle="tab">Секция 4</a>
+                </li>
+                <li id="#section5"> 
+                    <a id="5" href="#section5" data-toggle="tab">Секция 5</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+                    <div id="listsection" class="section">
+
+                    </div>
+                    <hr>
+                    <div class="section">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" placeholder="id" disabled="">
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <input type="text" id="brendsnewname" class="form-control" placeholder="Название бренда">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <input id="brendsnewsort" type="text" class="form-control" placeholder="Сортировка">
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <input id="brendssection" type="text" class="form-control" placeholder="Секция">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="material-switch pull-right">
+                                                    <input id="brendstatus" name="someSwitchOption001" type="checkbox"/>
+                                                    <label for="brendstatus" class="label-success"></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <a id="addbrends" class="btn btn-block btn-success">V</a>
+                                            </div>
+                                            <div class="col-sm-1">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body></html>
